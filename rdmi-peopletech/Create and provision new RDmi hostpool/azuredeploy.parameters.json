@@ -2,13 +2,6 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "tagvalues": {
-            "value": {
-                "Owner": "changeme",
-                "Department": "changeme",
-                "Application": "changeme"
-            }
-        },
         "storageAccountResourceGroupName": {
             "value": "rdmishstorage",
             "metadata": {
@@ -16,7 +9,7 @@
             }
         },
         "VmImageVhdUri": {
-            "value": "https://rdsstorage.blob.core.windows.net/vhds/sessionhostimage.vhd",
+            "value": "https://rdmishstorage.blob.core.windows.net/vhds/RDMIBASEIMAGE0120180727145219.vhd",
             "metadata": {
                 "description": "URI of the sysprepped image vhd file to be used to create the session host VMs. For example, https://rdsstorage.blob.core.windows.net/vhds/sessionhostimage.vhd"
             }
@@ -40,15 +33,17 @@
             }
         },
         "existingDomainUPN": {
-            "value": "string",
+            "value": "",
             "metadata": {
                 "description": "A username in the domain that has privileges to join the session hosts to the domain. For example, “user1@contoso.com”."
             }
         },
         "existingDomainPassword": {
-            "value": "securestring",
-            "metadata": {
-                "description": "The password that corresponds to the existing domain username."
+            "reference": {
+                "keyVault": {
+                    "id": "/subscriptions/ac787c18-bfdd-46e2-824b-ca567f069426/resourceGroups/RDMIVault/providers/Microsoft.KeyVault/vaults/RDMISecrets"
+                },
+                "secretName": "DomainJoinPW"
             }
         },
         "virtualNetworkResourceGroupName": {
@@ -76,31 +71,33 @@
             }
         },
         "ExistingTenantName": {
-            "value": "JnJ",
+            "value": "",
             "metadata": {
                 "description": "The name of the RDS Tenant in the RDmi deployment."
             }
         },
         "HostPoolName": {
-            "value": "string",
+            "value": "RDSHTest",
             "metadata": {
                 "description": "The name of the hostpool to be created in the RDS Tenant."
             }
         },
         "TenantAdminUPN": {
-            "value": "string",
+            "value": "",
             "metadata": {
                 "description": "The UPN that has rights in the RDS Tenant to create the hostpool. For example, “admin1@contoso.com”"
             }
         },
         "TenantAdminPassword": {
-            "value": "",
-            "metadata": {
-                "description": "The password that corresponds to the tenant admin UPN."
+            "reference": {
+                "keyVault": {
+                    "id": "/subscriptions/ac787c18-bfdd-46e2-824b-ca567f069426/resourceGroups/RDMIVault/providers/Microsoft.KeyVault/vaults/RDMISecrets"
+                },
+                "secretName": "RDMITenantAdminPW"
             }
         },
         "baseUrl": {
-            "value": "https://raw.githubusercontent.com/Azure/RDS-Templates/master/rdmi-peopletech/Create%20and%20provision%20new%20RDmi%20hostpool/",
+            "value": "https://raw.githubusercontent.com/obfusgator/RDS-Templates/master/rdmi-peopletech/Create%20and%20provision%20new%20RDmi%20hostpool/",
             "metadata": {
                 "description": "The base URL for RDmi info"
             }
