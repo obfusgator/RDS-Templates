@@ -21,7 +21,7 @@
             }
         },
         "rdshNumberOfInstances": {
-            "value": "2",
+            "value": 2,
             "metadata": {
                 "description": "Number of session hosts that will be created and added to the hostpool."
             }
