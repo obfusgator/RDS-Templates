@@ -53,7 +53,7 @@
             }
         },
         "existingVnetName": {
-            "value": "VPCxAzureMedicalNA-eastus",
+            "value": "VPCxAzureMedicalNA",
             "metadata": {
                 "description": "The name of the virtual network the VMs will be connected to."
             }
