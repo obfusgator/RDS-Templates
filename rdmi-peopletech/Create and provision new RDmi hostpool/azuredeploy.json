@@ -103,7 +103,7 @@
                 "description": "The base URL for RDmi info",
                 "artifactsBaseUrl": ""
             },
-            "defaultValue": "https://raw.githubusercontent.com/Azure/RDS-Templates/master/rdmi-peopletech/Create%20and%20provision%20new%20RDmi%20hostpool/"
+            "defaultValue": "https://raw.githubusercontent.com/obfusgator/RDS-Templates/master/rdmi-peopletech/Create%20and%20provision%20new%20RDmi%20hostpool/"
         }
     },
     "variables": {
@@ -116,7 +116,8 @@
         "HostPoolDescription": "template through create hostpool",
         "RegistrationExpirationHours": "48",
         "storageAccountName": "[split( split( parameters('VmImageVhdUri'), '/')[2], '.' )[0]]",
-        "storageaccount": "[concat(resourceId(parameters('storageAccountResourceGroupName'),'Microsoft.Storage/storageAccounts',variables('storageAccountName')))]",
+        "storageAccountName1": "rdmishdiags",
+        "storageaccount": "[concat(resourceId(parameters('storageAccountResourceGroupName'),'Microsoft.Storage/storageAccounts',variables('storageAccountName1')))]",
         "scriptURI": "[concat(parameters('baseUrl'),'/Scripts/Script.ps1')]",
         "deployAgentURI": "[concat(parameters('baseUrl'),'/Scripts/DeployAgent.zip')]"
     },
@@ -145,13 +146,20 @@
             }
         },
         {
-            "apiVersion": "2015-06-15",
+            "apiVersion": "2018-06-01",
             "type": "Microsoft.Compute/availabilitySets",
             "name": "[concat(variables('rdshPrefix'), 'availabilitySet')]",
-            "location": "[resourceGroup().location]"
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "platformFaultDomainCount": 3,
+                "platformUpdateDomainCount": 3
+            },
+            "sku": {
+                "name": "Aligned"
+            }
         },
         {
-            "apiVersion": "2015-06-15",
+            "apiVersion": "2018-06-01",
             "type": "Microsoft.Compute/virtualMachines",
             "name": "[concat(variables('rdshPrefix'), copyindex())]",
             "location": "[resourceGroup().location]",
@@ -176,17 +184,17 @@
                     "adminPassword": "[parameters('existingDomainPassword')]"
                 },
                 "storageProfile": {
+                    "imageReference": {
+                        "id": "/subscriptions/ac787c18-bfdd-46e2-824b-ca567f069426/resourceGroups/AZRDMIS16-RG/providers/Microsoft.Compute/images/RDMIBASEIMAGE01"
+                    },
                     "osDisk": {
                         "name": "[concat(variables('rdshPrefix'), copyindex(),'-osDisk')]",
                         "osType": "Windows",
                         "caching": "ReadWrite",
-                        "createOption": "FromImage",
-                        "image": {
-                            "uri": "[parameters('VmImageVhdUri')]"
+                        "managedDisk": {
+                            "storageaccounttype":"Premium_LRS"
                         },
-                        "vhd": {
-                            "uri": "[concat(reference(variables('storageaccount'), '2016-01-01').primaryEndpoints.blob, variables('vhds'), copyindex(), '-osdisk.vhd')]"
-                        }
+                        "createOption": "FromImage"
                     }
                 },
                 "networkProfile": {
@@ -205,7 +213,7 @@
             },
             "resources": [
                 {
-                    "apiVersion": "2015-06-15",
+                    "apiVersion": "2018-06-01",
                     "type": "extensions",
                     "name": "dscextension",
                     "location": "[resourceGroup().location]",
