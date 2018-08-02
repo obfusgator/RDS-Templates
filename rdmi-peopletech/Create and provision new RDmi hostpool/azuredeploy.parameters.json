@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "storageAccountResourceGroupName": {
-            "value": "rdmishstorage",
+            "value": "RDmiSH",
             "metadata": {
                 "description": "The resource group containing the storage account of the image vhd file."
             }
@@ -47,7 +47,7 @@
             }
         },
         "virtualNetworkResourceGroupName": {
-            "value": "VPCxAzureTeradataNA",
+            "value": "VPCxAzureMedicalNA",
             "metadata": {
                 "description": "The resource group containing the existing virtual network."
             }
