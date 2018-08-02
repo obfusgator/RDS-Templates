@@ -107,6 +107,7 @@
         }
     },
     "variables": {
+        "localAdminUsername": "JNJAzure",
         "rdshPrefix": "[concat(parameters('rdshNamePrefix'),'-')]",
         "existingDomainName": "[last(split(parameters('existingDomainUPN'), '@'))]",
         "existingDomainUsername": "[first(split(parameters('existingDomainUPN'), '@'))]",
