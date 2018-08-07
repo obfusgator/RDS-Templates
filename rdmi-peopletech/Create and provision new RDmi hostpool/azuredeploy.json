@@ -258,6 +258,10 @@
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "name": "[concat(variables('rdshPrefix'),copyindex(),'/joindomain')]",
             "location": "[resourceGroup().location]",
+            "copy": {
+                "name": "Domainjoinloop",
+                "count": "[parameters('rdshNumberOfInstances')]"
+            },
             "dependsOn": [
                 "[resourceId('Microsoft.Compute/virtualMachines', concat(variables('rdshPrefix'), copyindex()))]"
             ],
