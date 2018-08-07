@@ -83,6 +83,12 @@
                 "description": "The name of the hostpool to be created in the RDS Tenant."
             }
         },
+        "oupath": {
+            "type": "string",
+            "metadata": {
+              "description": "Specifies an organizational unit (OU) for the domain account. Enter the full distinguished name of the OU in quotation marks. Example: \"OU=testOU; DC=domain; DC=Domain; DC=com"
+            }
+          },
         "TenantAdminUPN": {
             "type": "string",
             "defaultvalue": "",
