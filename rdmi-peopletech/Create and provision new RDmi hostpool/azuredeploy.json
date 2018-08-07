@@ -222,7 +222,7 @@
                 {
                     "apiVersion": "2018-06-01",
                     "type": "extensions",
-                    "name": "dscextension",
+                    "name": "[concat(variables('rdshPrefix'),copyindex(),'/joindomain')]",
                     "location": "[resourceGroup().location]",
                     "dependsOn": [
                         "[resourceId('Microsoft.Compute/virtualMachines', concat(variables('rdshPrefix'), copyindex()))]"
