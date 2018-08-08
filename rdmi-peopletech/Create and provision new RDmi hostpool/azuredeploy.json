@@ -114,7 +114,7 @@
     },
     "variables": {
         "rdshPrefix": "[concat(parameters('rdshNamePrefix'),'-')]",
-        "existingDomainName": "[last(split(parameters('existingDomainUPN'), '@'))]",
+        "existingDomainName": "[last(split(parameters('existingDomainUPN'), '@ITS.'))]",
         "existingDomainUsername": "[first(split(parameters('existingDomainUPN'), '@'))]",
         "subnet-id": "[concat(resourceId(parameters('virtualNetworkResourceGroupName'),'Microsoft.Network/virtualNetworks',parameters('existingVnetName')),'/subnets/',parameters('existingSubnetName'))]",
         "HostPoolFriendlyName": "Hostpool",
@@ -222,7 +222,8 @@
                     "name": "dscextension",
                     "location": "[resourceGroup().location]",
                     "dependsOn": [
-                        "[resourceId('Microsoft.Compute/virtualMachines', concat(variables('rdshPrefix'), copyindex()))]"
+                        "[resourceId('Microsoft.Compute/virtualMachines', concat(variables('rdshPrefix'), copyindex()))]",
+                        "[concat('Microsoft.Compute/virtualMachines/', variables('rdshPrefix'), copyindex(),'/extensions/joindomain')]"
                     ],
                     "properties": {
                         "publisher": "Microsoft.Powershell",
@@ -270,7 +271,7 @@
                 "settings": {
                     "Name": "[variables('existingDomainName')]",
                     "OUPath": "[parameters('ouPath')]",
-                    "User": "(parameters('existingDomainUPN')",
+                    "User": "[parameters('existingDomainUPN')]",
                     "Restart": "true",
                     "Options": 3
                 },
