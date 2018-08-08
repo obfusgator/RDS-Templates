@@ -8,6 +8,12 @@
                 "description": "The resource group containing the storage account of the image vhd file."
             }
         },
+        "VmImageVhdUri": {
+            "type": "string",
+            "metadata": {
+                "description": "URI of the sysprepped image vhd file to be used to create the session host VMs. For example, https://rdsstorage.blob.core.windows.net/vhds/sessionhostimage.vhd"
+            }
+        },
         "rdshNamePrefix": {
             "type": "string",
             "metadata": {
