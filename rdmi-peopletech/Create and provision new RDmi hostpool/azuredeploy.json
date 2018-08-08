@@ -8,12 +8,6 @@
                 "description": "The resource group containing the storage account of the image vhd file."
             }
         },
-        "VmImageVhdUri": {
-            "type": "string",
-            "metadata": {
-                "description": "URI of the sysprepped image vhd file to be used to create the session host VMs. For example, https://rdsstorage.blob.core.windows.net/vhds/sessionhostimage.vhd"
-            }
-        },
         "rdshNamePrefix": {
             "type": "string",
             "metadata": {
@@ -113,16 +107,13 @@
         }
     },
     "variables": {
-        "localAdminUsername": "JNJAzure",
         "rdshPrefix": "[concat(parameters('rdshNamePrefix'),'-')]",
         "existingDomainName": "[last(split(parameters('existingDomainUPN'), '@'))]",
         "existingDomainUsername": "[first(split(parameters('existingDomainUPN'), '@'))]",
-        "vhds": "[concat('vhds','/', variables('rdshPrefix'))]",
         "subnet-id": "[concat(resourceId(parameters('virtualNetworkResourceGroupName'),'Microsoft.Network/virtualNetworks',parameters('existingVnetName')),'/subnets/',parameters('existingSubnetName'))]",
         "HostPoolFriendlyName": "Hostpool",
         "HostPoolDescription": "template through create hostpool",
         "RegistrationExpirationHours": "48",
-        "storageAccountName": "[split( split( parameters('VmImageVhdUri'), '/')[2], '.' )[0]]",
         "storageAccountName1": "rdmishdiags",
         "storageaccount": "[concat(resourceId(parameters('storageAccountResourceGroupName'),'Microsoft.Storage/storageAccounts',variables('storageAccountName1')))]",
         "scriptURI": "[concat(parameters('baseUrl'),'/Scripts/Script.ps1')]",
