@@ -245,9 +245,7 @@
                     "NumberOfRetries": 3
                 },
                 "protectedSettings": {
-                    "Items": {
                         "Password": "[parameters('existingDomainPassword')]"
-                    }
                 }
             }
         },
@@ -260,6 +258,10 @@
                 "[resourceId('Microsoft.Compute/virtualMachines', concat(variables('rdshPrefix'), copyindex()))]",
                 "[concat('Microsoft.Compute/virtualMachines/', variables('rdshPrefix'), copyindex(),'/extensions/joindomain')]"
             ],
+            "copy": {
+                "name": "rdsh-dsc-loop",
+                "count": "[parameters('rdshNumberOfInstances')]"
+            },
             "properties": {
                 "publisher": "Microsoft.Powershell",
                 "type": "DSC",

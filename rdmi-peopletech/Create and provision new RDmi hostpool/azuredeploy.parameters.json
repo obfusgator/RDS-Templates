@@ -37,7 +37,10 @@
                 "keyVault": {
                     "id": "/subscriptions/ac787c18-bfdd-46e2-824b-ca567f069426/resourceGroups/AZRDMIS16-RG/providers/Microsoft.KeyVault/vaults/RDMISecrets"
                 },
-                "secretName": "DomainJoinPW"
+                "secretName": "RDMITenantAdminPW"
+            },
+            "metadata": {
+                "notes": "Can use: DomainJoinPW"
             }
         },
         "virtualNetworkResourceGroupName": {
