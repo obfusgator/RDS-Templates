@@ -40,6 +40,9 @@
                 "description": "The password that corresponds to the existing domain username."
             }
         },
+        "localAdminPassword": {
+            "type": "string"
+        },
         "existingDomainFqdn": {
             "type": "string",
             "metadata": {
@@ -185,7 +188,7 @@
                 "osProfile": {
                     "computerName": "[concat(variables('rdshPrefix'), copyindex())]",
                     "adminUsername": "[variables('existingDomainUsername')]",
-                    "adminPassword": "[parameters('existingDomainPassword')]"
+                    "adminPassword": "[parameters('localAdminPassword')]"
                 },
                 "storageProfile": {
                     "imageReference": {
@@ -214,43 +217,8 @@
                         "storageUri": "[reference(variables('storageaccount'), '2016-01-01').primaryEndpoints.blob]"
                     }
                 }
-            },
-            "resources": [
-                {
-                    "apiVersion": "2018-06-01",
-                    "type": "extensions",
-                    "name": "dscextension",
-                    "location": "[resourceGroup().location]",
-                    "dependsOn": [
-                        "[resourceId('Microsoft.Compute/virtualMachines', concat(variables('rdshPrefix'), copyindex()))]",
-                        "[concat('Microsoft.Compute/virtualMachines/', variables('rdshPrefix'), copyindex(),'/extensions/joindomain')]"
-                    ],
-                    "properties": {
-                        "publisher": "Microsoft.Powershell",
-                        "type": "DSC",
-                        "typeHandlerVersion": "2.11",
-                        "autoUpgradeMinorVersion": true,
-                        "settings": {
-                            "ModulesUrl": "[concat(parameters('baseUrl'),'/DSC/Configuration.zip')]",
-                            "ConfigurationFunction": "Configuration.ps1\\SessionHost",
-                            "Properties": {
-                                "DomainName": "[variables('existingDomainName')]",
-                                "AdminCreds": {
-                                    "UserName": "[variables('existingDomainUsername')]",
-                                    "Password": "PrivateSettingsRef:AdminPassword"
-                                }
-                            }
-                        },
-                        "protectedSettings": {
-                            "Items": {
-                                "AdminPassword": "[parameters('existingDomainPassword')]"
-                            }
-                        }
-                    }
-                }
-            ]
+            }
         },
-        
         {
             "apiVersion": "2018-06-01",
             "type": "Microsoft.Compute/virtualMachines/extensions",
@@ -286,10 +254,33 @@
         {
             "apiVersion": "2018-06-01",
             "type": "Microsoft.Compute/virtualMachines/extensions",
+            "name": "[concat(variables('rdshPrefix'), copyindex(),'/','dscextension')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Compute/virtualMachines', concat(variables('rdshPrefix'), copyindex()))]",
+                "[concat('Microsoft.Compute/virtualMachines/', variables('rdshPrefix'), copyindex(),'/extensions/joindomain')]"
+            ],
+            "properties": {
+                "publisher": "Microsoft.Powershell",
+                "type": "DSC",
+                "typeHandlerVersion": "2.11",
+                "autoUpgradeMinorVersion": true,
+                "settings": {
+                    "ModulesUrl": "[concat(parameters('baseUrl'),'/DSC/Configuration2.zip')]",
+                    "ConfigurationFunction": "Configuration.ps1\\SessionHost",
+                    "Properties": {
+                    }
+                }
+            }
+        },
+        {
+            "apiVersion": "2018-06-01",
+            "type": "Microsoft.Compute/virtualMachines/extensions",
             "name": "[concat(variables('rdshPrefix'), copyindex(),'/','rdAgent')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[concat('Microsoft.Compute/virtualMachines/', concat(variables('rdshPrefix'), copyindex(),'/extensions/dscextension'))]"
+                "[concat('Microsoft.Compute/virtualMachines/', concat(variables('rdshPrefix'), copyindex(),'/extensions/dscextension'))]",
+                "[concat('Microsoft.Compute/virtualMachines/', variables('rdshPrefix'), copyindex(),'/extensions/joindomain')]"
             ],
             "copy": {
                 "name": "rdsh-vm-loop",
