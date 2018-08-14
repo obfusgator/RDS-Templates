@@ -268,7 +268,7 @@
                 "typeHandlerVersion": "2.11",
                 "autoUpgradeMinorVersion": true,
                 "settings": {
-                    "ModulesUrl": "[concat(parameters('baseUrl'),'/DSC/Configuration2.zip')]",
+                    "ModulesUrl": "[concat(parameters('baseUrl'),'/DSC/Configuration.zip')]",
                     "ConfigurationFunction": "Configuration.ps1\\SessionHost",
                     "Properties": {
                     }
